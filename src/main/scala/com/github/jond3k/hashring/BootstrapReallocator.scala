@@ -31,7 +31,7 @@ class BootstrapReallocator(nodes: List[HashRingNode], ring: Array[HashRingNode])
   private[this] def allocateRemainder(node: HashRingNode, remaining: Int, iterator: Int = 0) {
     if (remaining > 0) {
       ring(iterator) = node
-      allocateRemainder(node, iterator + 1, remaining - 1)
+      allocateRemainder(node, remaining - 1, iterator + 1)
     }
   }
 
