@@ -30,9 +30,9 @@ class RemoveReallocator(remove: HashRingNode, ring: Array[HashRingNode]) extends
     if (remaining > 0) {
       if (ring(iterator) == remove) {
         ring(iterator) = node
-        redistributeRemainder(node, iterator + 1, remaining - 1)
+        redistributeRemainder(node, remaining - 1, iterator + 1)
       } else {
-        redistributeRemainder(node, iterator + 1, remaining)
+        redistributeRemainder(node, remaining, iterator + 1)
       }
     } else {
       iterator

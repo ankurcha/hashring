@@ -14,7 +14,7 @@ class BootstrapReallocator(nodes: List[HashRingNode], ring: Array[HashRingNode])
   // equally distribute buckets
   val bucketsPerNode: Int = math.floor(ring.length / nodes.length).toInt.ensuring(_ > 0)
 
-  // we can't always balance things out equally. give the remainder to the first node
+  // we can't always bootstrapping things out equally. give the remainder to the first node
   val remainder     = ring.length % nodes.length
   val remainderNode = nodes.head
 
