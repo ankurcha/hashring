@@ -4,9 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <groupId>com.github.jond3k</groupId>
     <artifactId>hashring</artifactId>
     <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <name>hashring</name>
+    <description>A consistent hash ring for load balancing and partitioning</description>
 
     <prerequisites>
         <maven>3.0.0</maven>
@@ -17,7 +27,38 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <scala.version>2.9.1</scala.version>
         <dropwizard.version>0.5.1</dropwizard.version>
+        <gitHubOwner>jond3k</gitHubOwner>
     </properties>
+
+    <!-- fluff for sonatype -->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/${gitHubOwner}/${project.artifactId}</url>
+        <connection>scm:git:https://github.com/${gitHubOwner}/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:git@github.com:${gitHubOwner}/${project.artifactId}.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>jond3k</id>
+            <name>Jonathan Davey</name>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>github</system>
+        <url>http://github.com/${gitHubOwner}/${project.artifactId}</url>
+    </issueManagement>
+
+    <!-- end fluff for sonatype -->
 
     <dependencies>
         <dependency>
@@ -26,6 +67,23 @@
             <version>${scala.version}</version>
         </dependency>
 
+        <!-- TESTING -->
+
+        <!-- scalatest provides us with unit and functional tests -->
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.version}</artifactId>
+            <version>2.0.M3</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- use java mockito for mocking -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -36,7 +94,7 @@
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <charset>UTF-8</charset>
+                    <charset>${project.reporting.outputEncoding}</charset>
                     <recompileMode>incremental</recompileMode>
                 </configuration>
                 <executions>

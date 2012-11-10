@@ -11,18 +11,33 @@ import annotation.tailrec
 class BootstrapReallocator(nodes: List[HashRingNode], ring: Array[HashRingNode]) extends Reallocator {
   assert(ring.length > 0)
   assert(nodes.length > 0)
-  val bucketsPerNode: Int = math.round(ring.length / nodes.length).ensuring(_ > 0)
+  // equally distribute buckets
+  val bucketsPerNode: Int = math.floor(ring.length / nodes.length).toInt.ensuring(_ > 0)
+
+  // we can't always balance things out equally. give the remainder to the first node
+  val remainder     = ring.length % nodes.length
+  val remainderNode = nodes.head
 
   @tailrec
   private[this] def allocate(nodes: List[HashRingNode], iterator: Int, remainingThisNode: Int) {
-    ring(iterator) = nodes.head
-    if      (iterator == ring.length) Unit
-    else if (remainingThisNode == 0)  allocate(nodes.tail, iterator, bucketsPerNode)
-    else                              allocate(nodes, iterator + 1, remainingThisNode - 1)
+    if (iterator < ring.length) {
+      ring(iterator) = nodes.head
+      if (remainingThisNode == 0) allocate(nodes.tail, iterator, bucketsPerNode)
+      else                        allocate(nodes, iterator + 1, remainingThisNode - 1)
+    }
+  }
+
+  @tailrec
+  private[this] def allocateRemainder(node: HashRingNode, remaining: Int, iterator: Int = 0) {
+    if (remaining > 0) {
+      ring(iterator) = node
+      allocateRemainder(node, iterator + 1, remaining - 1)
+    }
   }
 
   def allocate() {
-    allocate(nodes, 0, bucketsPerNode)
+    allocateRemainder(remainderNode, remainder)
+    allocate(nodes, remainder, bucketsPerNode)
   }
 
 }

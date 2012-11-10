@@ -1,15 +1,18 @@
 package com.github.jond3k.hashring
 
+import org.scalatest.FlatSpec
+import org.scalatest.matchers.MustMatchers
+
 /**
  * @author jonathan davey <jond3k@gmail.com>
  */
-class BootstrapReallocatorTest extends FunSuite with MustMatchers {
+class BootstrapReallocatorTest extends FlatSpec with MustMatchers {
 
-  it must "fail given zero buckets" in {
+  it must "fail when given zero buckets" in {
 
   }
 
-  it must "fail given zero nodes" in {
+  it must "fail when given zero nodes" in {
 
   }
 
@@ -17,13 +20,12 @@ class BootstrapReallocatorTest extends FunSuite with MustMatchers {
 
   }
 
-  it must "split buckets 50/50 given two nodes and 10 buckets" in {
+  it must "split buckets 5/5 given 2 nodes and 10 buckets" in {
 
   }
 
-  it must "split buckets 33/33/33 given three nodes and 100 buckets" in {
+  it must "split buckets 4/3/3 given 3 nodes and 10 buckets" in {
 
   }
 
-  it must "split buckets "
 }
