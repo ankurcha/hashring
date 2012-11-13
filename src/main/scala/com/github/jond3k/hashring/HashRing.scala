@@ -15,7 +15,7 @@ import java.util
  */
 class HashRing[K, V](val values: List[V],
                      val keyHashFun:   (K)      => Int = { key: K => key.hashCode() },
-                     val valueHashFun: (V, Int) => Int = { (value: V, replica: Int) => (value.toString + replica).hashCode },
+                     val valueHashFun: (V, Int) => Int = { (value: V, replica: Int) => (value.toString + replica * 10).hashCode },
                      val replicas: Int = 1) {
 
   final protected val ring: util.SortedMap[Int, V] = new util.TreeMap[Int, V]()
@@ -45,6 +45,13 @@ class HashRing[K, V](val values: List[V],
   }
 
   /**
+   * Make a clone of this HashRing but give it new nodes
+   */
+  def replace(nodes: List[V]): HashRing[K, V] = {
+    new HashRing(nodes, keyHashFun, valueHashFun, replicas)
+  }
+
+  /**
    * Get the next hash code after a position in the ring
    */
   final protected def nextValueHash(keyHash: Int) = ring.tailMap(keyHash) match {
@@ -70,7 +77,7 @@ class HashRing[K, V](val values: List[V],
   }
 
   /**
-   * Get the value for this key
+   * Get the value for this key, apply() is preferred.
    */
   def get(key: K): V = apply(key)
 
