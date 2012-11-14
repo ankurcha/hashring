@@ -9,7 +9,7 @@ import java.util
  *
  * - immutability
  * - fewer lookups
- * - separate hash functions
+ * - separate key and value hash functions
  *
  * @author jonathan davey <jond3k@gmail.com>
  */
@@ -47,8 +47,15 @@ class HashRing[K, V](val values: List[V],
   /**
    * Make a clone of this HashRing but give it new nodes
    */
-  def replace(nodes: List[V]): HashRing[K, V] = {
-    new HashRing(nodes, keyHashFun, valueHashFun, replicas)
+  def replace(values: List[V]): HashRing[K, V] = {
+    new HashRing(values, keyHashFun, valueHashFun, replicas)
+  }
+
+  /**
+   * Make an identical clone of this HashRing
+   */
+  override def clone(): HashRing[K, V] = {
+    new HashRing(values, keyHashFun, valueHashFun, replicas)
   }
 
   /**
