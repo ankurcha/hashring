@@ -1,22 +1,17 @@
 package com.github.jond3k.hashring
 
+import java.net.InetAddress
+
 /**
- * @author jonathan davey <jond3k@gmail.com>
+ * Uniquely identifies a server in the cluster
  */
-class Instance(val id: String) {
+case class Instance(id: String)
 
-  def this(host: String, port: Int) {
-    this("%s_%s" format (host, port))
+object Instance {
+  /**
+   * Create an instance identified by the localhost's hostname. Easy to use but inherently problematic
+   */
+  def fromHostname(): Instance = {
+    Instance(InetAddress.getLocalHost.getHostName)
   }
-
-  def this(host: String, port: Int, salt: String) {
-    this("%s_%s_%s" format (host, port, salt))
-  }
-
-  override def hashCode = id.hashCode
-  override def equals(o: Any) = o match {
-    case t: Instance => t.id == id
-    case _ => false
-  }
-  override def toString = "Instance(%s)" format id
 }

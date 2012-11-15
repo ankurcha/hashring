@@ -7,15 +7,15 @@ import collection.mutable
  */
 trait HashRingHelper {
   // use strings as a type as they should already generate good hash code entropy
-  val defaultValueHashFun = new HashRing[String, String](List.empty).valueHashFun
-  val defaultKeyHashFun   = new HashRing[String, String](List.empty).keyHashFun
+  val defaultValueHashFun = new HashRing[String, String](Set.empty).valueHashFun
+  val defaultKeyHashFun   = new HashRing[String, String](Set.empty).keyHashFun
 
   def ring(ids: Seq[Int]) = {
-    new HashRing[Int, Int](ids.toList, valueHashFun = (k, r) => k.hashCode)
+    new HashRing[Int, Int](ids.toSet, valueHashFun = (k, r) => k.hashCode)
   }
 
   def defaultHashRing(ids: Seq[Int], replicas: Int = 1) = {
-    new HashRing[Int, Int](ids.toList, replicas = replicas)
+    new HashRing[Int, Int](ids.toSet, replicas = replicas)
   }
 
   def lookupsFor(range: Seq[Int], ring: HashRing[Int, Int]) = {

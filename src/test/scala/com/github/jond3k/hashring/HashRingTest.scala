@@ -25,27 +25,27 @@ class HashRingTest extends FlatSpec with MustMatchers with HashRingHelper {
   }
 
   it must "reject adding values it already has" in {
-    intercept[IllegalArgumentException](ring(List(1)).add(List(1)))
-    intercept[IllegalArgumentException](ring(List(1, 2)).add(List(2)))
+    intercept[IllegalArgumentException](ring(List(1)).add(Set(1)))
+    intercept[IllegalArgumentException](ring(List(1, 2)).add(Set(2)))
   }
 
-  it must "allow adding new values" in (ring(List(1)).add(List(2)))
+  it must "allow adding new values" in (ring(List(1)).add(Set(2)))
 
   it must "reject removing values it doesn't already have" in {
-    intercept[IllegalArgumentException](ring(List()).remove(List(1)))
-    intercept[IllegalArgumentException](ring(List(2)).remove(List(1)))
+    intercept[IllegalArgumentException](ring(List()).remove(Set(1)))
+    intercept[IllegalArgumentException](ring(List(2)).remove(Set(1)))
   }
 
-  it must "allow removing existing values" in (ring(List(2)).remove(List(2)))
+  it must "allow removing existing values" in (ring(List(2)).remove(Set(2)))
 
   it must "return a new version that redistributes buckets for removed nodes" in {
-    lookupsFor(1 to 100, ring(1 to 10).remove((1 to 5).toList)) must equal(
+    lookupsFor(1 to 100, ring(1 to 10).remove((1 to 5).toSet)) must equal(
       lookupsFor(1 to 100, ring(6 to 10))
     )
   }
 
   it must "return a new version that reallocates buckets to new nodes" in {
-    lookupsFor(1 to 100, ring(1 to 5).add((6 to 10).toList)) must equal(
+    lookupsFor(1 to 100, ring(1 to 5).add((6 to 10).toSet)) must equal(
       lookupsFor(1 to 100, ring(1 to 10))
     )
   }

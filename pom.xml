@@ -26,8 +26,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <scala.version>2.9.1</scala.version>
-        <zk.version>3.4.3-cdh4.1.2</zk.version>
-        <gitHubOwner>jond3k</gitHubOwner>
+        <curator.version>1.2.4</curator.version>
+        <github.owner>jond3k</github.owner>
     </properties>
 
     <!-- fluff for sonatype -->
@@ -41,9 +41,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/${gitHubOwner}/${project.artifactId}</url>
-        <connection>scm:git:https://github.com/${gitHubOwner}/${project.artifactId}.git</connection>
-        <developerConnection>scm:git:git@github.com:${gitHubOwner}/${project.artifactId}.git</developerConnection>
+        <url>https://github.com/${github.owner}/${project.artifactId}</url>
+        <connection>scm:git:https://github.com/${github.owner}/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:git@github.com:${github.owner}/${project.artifactId}.git</developerConnection>
     </scm>
 
     <developers>
@@ -55,7 +55,7 @@
 
     <issueManagement>
         <system>github</system>
-        <url>http://github.com/${gitHubOwner}/${project.artifactId}</url>
+        <url>http://github.com/${github.owner}/${project.artifactId}</url>
     </issueManagement>
 
     <!-- end fluff for sonatype -->
@@ -67,11 +67,11 @@
             <version>${scala.version}</version>
         </dependency>
 
-        <!-- zookeeper for server registry -->
+        <!-- use netflix's curator library for zookeeper -->
         <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-            <version>${zk.version}</version>
+            <groupId>com.netflix.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>${curator.version}</version>
         </dependency>
 
         <!-- TESTING -->
@@ -99,13 +99,21 @@
 
             <!-- scala maven plugin -->
             <plugin>
+
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
                     <charset>UTF-8</charset>
                     <recompileMode>incremental</recompileMode>
+                    <launchers>
+                    <launcher>
+                        <id>example</id>
+                        <mainClass>com.github.jond3k.hashring.Example</mainClass>
+                    </launcher>
+                </launchers>
                 </configuration>
+
                 <executions>
                     <execution>
                         <goals>

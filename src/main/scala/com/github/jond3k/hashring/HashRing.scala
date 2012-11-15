@@ -13,7 +13,7 @@ import java.util
  *
  * @author jonathan davey <jond3k@gmail.com>
  */
-class HashRing[K, V](val values: List[V],
+class HashRing[K, V](val values: Set[V],
                      val keyHashFun:   (K)      => Int = { key: K => key.hashCode() },
                      val valueHashFun: (V, Int) => Int = { (value: V, replica: Int) => (value.toString + replica * 10).hashCode },
                      val replicas: Int = 1) {
@@ -27,17 +27,20 @@ class HashRing[K, V](val values: List[V],
   /**
    * Create a new HashRing with fewer nodes
    */
-  def remove(removeNodes: List[V]): HashRing[K, V] = {
+  def remove(removeNodes: Set[V]): HashRing[K, V] = {
     if (removeNodes.intersect(values) != removeNodes) {
       throw new IllegalArgumentException("attempted to remove values that are not already present")
     }
     new HashRing(values.diff(removeNodes), keyHashFun, valueHashFun, replicas)
   }
 
+  def add(addNode: V): HashRing[K, V] = add(Set(addNode))
+  def remove(removeNode: V): HashRing[K, V] = remove(Set(removeNode))
+
   /**
    * Create a new HashRing with more nodes
    */
-  def add(addNodes: List[V]): HashRing[K, V] = {
+  def add(addNodes: Set[V]): HashRing[K, V] = {
     if (!addNodes.intersect(values).isEmpty) {
       throw new IllegalArgumentException("attempted to add values that are already present")
     }
@@ -47,7 +50,7 @@ class HashRing[K, V](val values: List[V],
   /**
    * Make a clone of this HashRing but give it new nodes
    */
-  def replace(values: List[V]): HashRing[K, V] = {
+  def replace(values: Set[V]): HashRing[K, V] = {
     new HashRing(values, keyHashFun, valueHashFun, replicas)
   }
 
